@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>aspnet-My20MVCApp-9C244FAF-ED9F-4690-8BF2-28FB4B94D157</UserSecretsId>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.3" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.2" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\My20MVCApp.Application\My20MVCApp.Application.csproj" />
+    <ProjectReference Include="..\My20MVCApp.Data.EF\My20MVCApp.Data.EF.csproj" />
+    <ProjectReference Include="..\My20MVCApp.Data\My20MVCApp.Data.csproj" />
+    <ProjectReference Include="..\My20MVCApp.Infrastructure\My20MVCApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\My20MVCApp.Utilities\My20MVCApp.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
