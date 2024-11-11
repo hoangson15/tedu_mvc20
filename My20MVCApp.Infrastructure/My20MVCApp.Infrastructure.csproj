@@ -7,7 +7,11 @@
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="SharedKernel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.3" />
   </ItemGroup>
 
 </Project>

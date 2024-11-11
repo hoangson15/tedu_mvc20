@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\My20MVCApp.Data.EF\My20MVCApp.Data.EF.csproj" />
     <ProjectReference Include="..\My20MVCApp.Data\My20MVCApp.Data.csproj" />
     <ProjectReference Include="..\My20MVCApp.Utilities\My20MVCApp.Utilities.csproj" />
