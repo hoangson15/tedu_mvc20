@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using My20MVCApp.Data.EF.Configurations;
 using My20MVCApp.Data.EF.Extensions;
 using My20MVCApp.Data.Entities;
+using My20MVCApp.Data.Interfaces;
 using System;
+using System.Linq;
 
 namespace My20MVCApp.Data.EF
 {
@@ -83,6 +86,24 @@ namespace My20MVCApp.Data.EF
             builder.AddConfiguration(new AdvertistmentPositionConfiguration());
 
             base.OnModelCreating(builder);
+        }
+
+        public override int SaveChanges()
+        {
+            var modified = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added);
+
+            foreach (EntityEntry item in modified)
+            {
+                var changeOrAddedItem = item.Entity as IDateTracking;
+
+                if (changeOrAddedItem != null)
+                {
+                    if (item.State == EntityState.Modified) changeOrAddedItem.DateModified = DateTime.Now;
+                    changeOrAddedItem.DateCreated = DateTime.Now;
+                }
+            }
+
+            return base.SaveChanges();
         }
     }
 }
