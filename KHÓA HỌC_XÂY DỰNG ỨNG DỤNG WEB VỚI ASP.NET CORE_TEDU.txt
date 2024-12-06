@@ -1,0 +1,186 @@
+KHÓA HỌC: XÂY DỰNG ỨNG DỤNG WEB VỚI ASP.NET CORE - TEDU - ASP.NET CORE 2.0
+-------------------------------------------------------------------------------
+
+Cấu trúc thư mục dự án:
+	Phần Views - Shared
+		_Layout: Master page
+		_LoginPartial: 
+		_ValidationScriptPartial: chứa các script dùng chung
+		Error: hiển thị trang lỗi
+	ViewImports: những gì using chung cho tất vào đây: models, ... tự động tất
+	cả các view sẽ tự động nhận được
+	ViewStart: chỉ định ra file layout, mặc định là file layout đã đc tự động
+	tạo ra. Nếu view nào ko để layout -> tự nhận theo view start
+	
+	appsettings: chứa các thông tin setting của hệ thống, có thể tạo ra setting
+	bower.json: chứa các dependencies cho client
+	bunderconfig:
+
+-------------------------------------------------------------------------------
+
+Cấu trúc dự án
+	Thường là sẽ có 4 phần, từ thấp đến cao:
+		Infrastructure: + Utilities
+			chứa các class chung, nền tảng cho toàn bộ dự án
+		
+		Data: + Data.EF + Repository
+			định nghĩa ra các models, entities, repositories -> tất cả những 
+			thứ liên quan đến truy cập dữ liệu (database) và mô hình dữ liệu
+		
+		Service: 
+			chuyên xử lý nghiệp vụ. khi có tầng này -> controller có thể chỉ
+			cần tương tác với view và requests
+			
+		Web Application:
+			nhận các request từ view, gọi đến các service rồi trả kết quả về
+			view 
+
+https://drive.google.com/file/d/1277FWhGD41TP8_1G_94p2fu5HUtClVMl/view?usp=
+sharing
+
+-------------------------------------------------------------------------------
+
+ASP.NET Identity
+
+-------------------------------------------------------------------------------
+
+Các khái niệm về bảo mật trong ASP.Net Core
+
+	Man-in-the-middle attack: 
+		lợi dụng sự kém bảo mật của http, hacker sẽ đứng ở giữa luồng trao đổi
+		giữa 
+	
+	Cross-Site Scripting (XSS) attacks
+		post 1 script bằng 1 cái input nào dấy để làm sao script đó chạy
+
+	Security Misconfiguration: 
+		cấu hình bảo mật không đúng cách, vd như sử dụng pass mặc định, ko cập 
+		nhật bản vá, cấp quyền ko cần thiết -> khiến hệ thống dễ bị khai thác
+	
+	Cross-Site Request Forgery: 
+		post một request giả mạo lên địa chỉ của chúng ta ...
+		
+	Malicious File Upload
+		push những file có hại lên server -> server thực thi file đó
+	
+	Version Discloser
+		không che giấu đi version của công nghệ, của máy chủ -> hacker dựa 
+		trên những lỗ hổng (nếu có) của version đấy để tấn công 
+	
+	SQL Inject Attack
+		lỗ hổng cho phép hacker can thiệp vào những truy vấn mà ứng dụng thực 
+		hiện đối với csdl của ứng dụng
+	
+	Sensitive Data Exposure
+		hacker xem được những thông tin nhạy cảm mà mình để lộ ra
+	
+	Audit trail
+		theo dõi người dùng nhận ra sự bất thường
+	
+	Broken authentication and session Management
+		
+	
+	Invalidated Redirects and Forwards
+		redirect đến 1 trang có hại mà ta không biết
+
+-------------------------------------------------------------------------------
+
+11. Triển khai các Enity để tạo cơ sở dữ liệu
+	Infra - ShareKernel
+	---------------
+	DomainEntity<T>
+		Id
+		IsTransient()
+	
+	Data - Interfaces
+	---------------
+	IDateTracking
+		DateCreated 
+		DateModified
+		
+	IHasOwner<T>
+		OwnerId
+		
+	IHasSeoMetaData
+		SeoPageTitle
+		SeoAlias
+		SeoKeywords
+		SeoDescription
+		
+	IHasSoftDelete
+		IsDeleted
+		
+	IMultiLanguage<T>
+		LanguagueId
+		
+	ISortable
+		int SortOrder
+		
+	ISwitchable
+		enum Status  
+	
+	---------------------
+	ProductCategory : DomainEntity<int>, IHasSeoMetaData, ISwitchable,ISortable
+						IDateTracking
+		Name
+		Description
+		int? ParentId
+		int? HomeOrder
+		string Image
+		bool? HomeFlag
+		
+		public virtual ICollection<Product> Products { get; set; }
+	
+	Product : DomainEntity<int>, IHasSeoMetaData, ISwitchable, IDateTracking
+	
+		Name
+		CategoryId
+		Image
+		decimal Price
+		decimal PromotionPrice
+		decimal PromotionPrice
+		string Description
+		string Content
+		bool? HomeFlag
+		bool HotFlag
+		int? ViewCount
+		string Tags
+		string Unit
+		
+		[ForeignKey(CategoryId)]
+		public virtual ProductCategory ProductCategory { get; set; }
+		
+		
+	Tag : DomainEntity<string>
+		Name
+		Type
+
+	Tag : DomainEntity<int>
+		ProductId
+		TagId
+		
+	public virtual Product
+	public virtual Tag
+	
+	-------------------
+	Data.EF
+	
+	TagConfiguration : DbEntityConfiguration<Tag>
+-------------------------------------------------------------------------------
+13. Seeding data tạo dữ liệu mẫu
+
+- ConnectionString:
+	Trusted_Connection=True => connect với db ko cần user/pass
+	-> Nếu dùng user/pass -> dùng User ID và Password, VD:
+		User ID=sa;Password=abc@123;
+	
+- AddScope, AddTransient, AddSingleton
+- Generic
+- DI
+
+https://tedu.com.vn/lap-trinh-c/su-khac-nhau-giua-ienumerable-va-iqueryable-35.html
+
+-------------------------------------------------------------------------------
+14. Triển khai tầng Service và AutoMapper
+
+- ConstructUsing
