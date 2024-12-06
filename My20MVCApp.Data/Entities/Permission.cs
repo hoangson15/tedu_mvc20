@@ -1,11 +1,12 @@
-﻿using System;
+﻿using My20MVCApp.Infrastructure.SharedKernel;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace My20MVCApp.Data.Entities
 {
     [Table("Permissions")]
-    public class Permission
+    public class Permission : DomainEntity<int>
     {
         public Permission() { }
         public Permission(Guid roleId, string functionId, bool canCreate,
