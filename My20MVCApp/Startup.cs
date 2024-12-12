@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using My20MVCApp.Data;
 using My20MVCApp.Data.EF;
 using My20MVCApp.Data.Entities;
-using My20MVCApp.Models;
 using My20MVCApp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace My20MVCApp
 {
@@ -39,6 +34,11 @@ namespace My20MVCApp
             // Add application services.
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
+
+            // Config AutoMapper
+            services.AddSingleton(Mapper.Configuration);
+            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
+            // .....
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<DbInitializer>();
@@ -69,7 +69,7 @@ namespace My20MVCApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //dbInitializer.Seed().Wait();
+            dbInitializer.Seed().Wait();
         }
     }
 }
