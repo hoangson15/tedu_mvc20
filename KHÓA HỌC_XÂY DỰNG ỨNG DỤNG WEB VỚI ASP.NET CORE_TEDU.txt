@@ -183,4 +183,22 @@ https://tedu.com.vn/lap-trinh-c/su-khac-nhau-giua-ienumerable-va-iqueryable-35.h
 -------------------------------------------------------------------------------
 14. Triển khai tầng Service và AutoMapper
 
-- ConstructUsing
+* Tạo các class cần thiết
+- application_interfaces -> IProductCategoryService
+- application_viewModels_Product -> ProductCategoryViewModel - ProductViewModel
+- application_implementations -> ProductCategoryService : IProductCategoryService
+- Data_IRepository -> IProductCategoryRepository 
+
+* Triển khai Repositories thì làm trong phần Data.EF    
+- Data.EF_Repositories -> ProductCategoryRepository : EFRepository<ProductCategory, int>, IProductCategoryRepository
+
+* Cấu hình AutoMapper
+- Cài package AutoMapper
+- application_AutoMapper -> AutoMapperConfig, DomainToViewModelMappingProfile : Profile, ViewModelToDomainMappingProfile : Profile
+=> HỌC ĐƯỢC CÁCH CẤU HÌNH AUTOMAPPER - 3 cái trên
+
+- AddScope - AddSingleton: AutoMapper
+
+* Implement Method IProductCategoryService
+
+* AddTransient IProductCategoryRepository và IProductCategoryService
