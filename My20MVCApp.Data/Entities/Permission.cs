@@ -23,7 +23,7 @@ namespace My20MVCApp.Data.Entities
         [Required]
         public Guid RoleId { get; set; }
 
-        [StringLength(128)]
+        //[StringLength(128)]
         [Required]
         public string FunctionId { get; set; }
 

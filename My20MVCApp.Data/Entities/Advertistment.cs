@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace My20MVCApp.Data.Entities
 {
     [Table("Advertistments")]
-    public class Advertistment : DomainEntity<string>, ISwitchable, ISortable
+    public class Advertistment : DomainEntity<int>, ISwitchable, ISortable
     {
         [StringLength(250)]
         public string Name { get; set; }

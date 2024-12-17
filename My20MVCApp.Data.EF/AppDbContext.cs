@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using My20MVCApp.Data.EF.Configurations;
 using My20MVCApp.Data.EF.Extensions;
 using My20MVCApp.Data.Entities;
 using My20MVCApp.Data.Interfaces;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace My20MVCApp.Data.EF
@@ -55,9 +58,10 @@ namespace My20MVCApp.Data.EF
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            #region Identity Config
             builder.Entity<IdentityUserClaim<Guid>>()
-                .ToTable("AppUserClaims")
-                .HasKey(x => x.Id);
+                    .ToTable("AppUserClaims")
+                    .HasKey(x => x.Id);
 
             builder.Entity<IdentityRoleClaim<Guid>>()
                 .ToTable("AppRoleClaims")
@@ -73,7 +77,8 @@ namespace My20MVCApp.Data.EF
 
             builder.Entity<IdentityUserToken<Guid>>()
                 .ToTable("AppUserTokens")
-                .HasKey(x => new { x.UserId });
+                .HasKey(x => new { x.UserId }); 
+            #endregion
 
             builder.AddConfiguration(new TagConfiguration());
             builder.AddConfiguration(new BlogTagConfiguration());
@@ -83,9 +88,9 @@ namespace My20MVCApp.Data.EF
             builder.AddConfiguration(new FooterConfiguration());
             builder.AddConfiguration(new ProductTagConfiguration());
             builder.AddConfiguration(new SystemConfigConfiguration());
-            builder.AddConfiguration(new AdvertistmentPositionConfiguration());
+            builder.AddConfiguration(new AdvertistmentPositionConfiguration()); 
 
-            base.OnModelCreating(builder);
+            //base.OnModelCreating(builder); 
         }
 
         public override int SaveChanges()
@@ -104,6 +109,23 @@ namespace My20MVCApp.Data.EF
             }
 
             return base.SaveChanges();
+        }
+    }
+
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    {
+        public AppDbContext CreateDbContext(string[] args)
+        {
+            // Config dbContext
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var builder = new DbContextOptionsBuilder<AppDbContext>();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            builder.UseSqlServer(connectionString);
+            return new AppDbContext(builder.Options);
         }
     }
 }

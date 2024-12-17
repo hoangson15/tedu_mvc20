@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using My20MVCApp.Data.EF.Extensions;
 using My20MVCApp.Data.Entities;
 
@@ -11,8 +12,7 @@ namespace My20MVCApp.Data.EF.Configurations
             entity.HasKey(c => c.Id);
             entity.Property(c => c.Id)
                 .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasMaxLength(255)
+                .HasColumnType("varchar(255)")
                 .IsRequired();
             // etc.
         }
